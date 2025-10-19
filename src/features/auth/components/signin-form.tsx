@@ -35,7 +35,7 @@ export function SignInForm() {
     setIsLoading(true);
 
     try {
-      await signIn(data);
+      await signIn(data as { email: string; password: string });
 
       toast({
         title: '로그인 성공',
