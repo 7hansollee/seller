@@ -37,6 +37,37 @@ bun dev
 - [React Hook Form](https://react-hook-form.com)
 - [TS Pattern](https://github.com/gvergnaud/ts-pattern)
 
+## 환경 변수 설정
+
+프로젝트 루트에 `.env.local` 파일을 생성하고 다음 환경 변수를 설정해주세요:
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
+```
+
+## Supabase 데이터베이스 마이그레이션
+
+1. Supabase 프로젝트를 생성합니다.
+2. `/supabase/migrations/20241013000000_create_profiles_table.sql` 파일의 내용을 Supabase SQL Editor에서 실행합니다.
+3. 위 환경 변수를 `.env.local` 파일에 설정합니다.
+
+## 인증 기능
+
+이 프로젝트는 Supabase를 활용한 이메일/비밀번호 기반 인증 기능을 제공합니다.
+
+### 주요 기능
+- 회원가입 (`/auth/signup`)
+- 로그인 (`/auth/login`)
+- 로그아웃
+- 인증된 사용자만 접근 가능한 페이지 보호 (middleware)
+- 사용자 프로필 관리
+
+### 보호된 라우트
+- `/write` - 글쓰기 페이지 (로그인 필요)
+- `/profile` - 프로필 페이지 (로그인 필요)
+
 ## 사용 가능한 명령어
 
 한글버전 사용
