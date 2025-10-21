@@ -147,6 +147,14 @@ export async function getCurrentUser() {
 
     if (sessionError) {
       console.error('Error getting session:', sessionError);
+      
+      // Invalid Refresh Token 에러인 경우 세션 정리
+      if (sessionError.message?.includes('Invalid Refresh Token') || 
+          sessionError.message?.includes('Refresh Token Not Found')) {
+        console.log('Invalid refresh token detected, signing out...');
+        await supabase.auth.signOut();
+      }
+      
       return null;
     }
 
@@ -162,6 +170,14 @@ export async function getCurrentUser() {
 
     if (userError) {
       console.error('Error getting user:', userError);
+      
+      // Invalid Refresh Token 에러인 경우 세션 정리
+      if (userError.message?.includes('Invalid Refresh Token') || 
+          userError.message?.includes('Refresh Token Not Found')) {
+        console.log('Invalid refresh token detected, signing out...');
+        await supabase.auth.signOut();
+      }
+      
       return null;
     }
 
@@ -205,6 +221,19 @@ export async function getCurrentUser() {
     };
   } catch (error) {
     console.error('Unexpected error in getCurrentUser:', error);
+    
+    // Invalid Refresh Token 에러인 경우 세션 정리
+    if (error instanceof Error && 
+        (error.message?.includes('Invalid Refresh Token') || 
+         error.message?.includes('Refresh Token Not Found'))) {
+      console.log('Invalid refresh token detected, signing out...');
+      try {
+        await supabase.auth.signOut();
+      } catch (signOutError) {
+        console.error('Error signing out:', signOutError);
+      }
+    }
+    
     return null;
   }
 }
@@ -223,5 +252,55 @@ export async function getUserProfile(userId: string): Promise<UserProfile | null
   }
 
   return data;
+}
+
+export async function requestPasswordReset(email: string) {
+  const supabase = createClient();
+
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: `${window.location.origin}/auth/reset-password`,
+  });
+
+  if (error) {
+    let errorMessage = '비밀번호 재설정 이메일 발송에 실패했습니다.';
+    
+    switch (error.message) {
+      case 'User not found':
+        errorMessage = '존재하지 않는 이메일입니다.';
+        break;
+      case 'Email rate limit exceeded':
+        errorMessage = '너무 많은 요청이 있었습니다. 잠시 후 다시 시도해주세요.';
+        break;
+      default:
+        errorMessage = `비밀번호 재설정 이메일 발송에 실패했습니다: ${error.message}`;
+    }
+    
+    throw new Error(errorMessage);
+  }
+}
+
+export async function updatePassword(newPassword: string) {
+  const supabase = createClient();
+
+  const { error } = await supabase.auth.updateUser({
+    password: newPassword,
+  });
+
+  if (error) {
+    let errorMessage = '비밀번호 변경에 실패했습니다.';
+    
+    switch (error.message) {
+      case 'Password should be at least 6 characters':
+        errorMessage = '비밀번호는 최소 6자 이상이어야 합니다.';
+        break;
+      case 'New password should be different from the old password':
+        errorMessage = '새 비밀번호는 이전 비밀번호와 달라야 합니다.';
+        break;
+      default:
+        errorMessage = `비밀번호 변경에 실패했습니다: ${error.message}`;
+    }
+    
+    throw new Error(errorMessage);
+  }
 }
 

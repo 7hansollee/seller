@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -75,7 +76,15 @@ export function SignInForm() {
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="password">비밀번호</Label>
+        <div className="flex items-center justify-between">
+          <Label htmlFor="password">비밀번호</Label>
+          <Link 
+            href="/auth/forgot-password" 
+            className="text-sm text-primary hover:text-primary/80 font-medium"
+          >
+            비밀번호를 잊으셨나요?
+          </Link>
+        </div>
         <Input
           id="password"
           type="password"

@@ -10,7 +10,8 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { Heart, MessageSquare, Eye, Share2, AlertCircle } from 'lucide-react';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { Heart, MessageSquare, Eye, Share2, AlertCircle, Link2, Share, Facebook } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import { POST_CATEGORIES } from '@/features/posts/types';
@@ -19,7 +20,8 @@ import { maskNickname } from '@/lib/utils';
 import { cn } from '@/lib/utils';
 import { CommentForm } from '@/features/comments/components/comment-form';
 import { CommentList } from '@/features/comments/components/comment-list';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
+import { useToast } from '@/hooks/use-toast';
 
 interface PostDetailPageProps {
   params: Promise<{ id: string }>;
@@ -32,9 +34,91 @@ export default function PostDetailPage({ params }: PostDetailPageProps) {
   const toggleLike = useTogglePostLike(id);
   const router = useRouter();
   const commentSectionRef = useRef<HTMLDivElement>(null);
+  const { toast } = useToast();
+  const [isSharing, setIsSharing] = useState(false);
 
   const handleLikeClick = () => {
     toggleLike.mutate();
+  };
+
+  const getShareUrl = () => `${window.location.origin}/post/${id}`;
+
+  // URL 복사
+  const handleCopyUrl = async () => {
+    if (!post) return;
+    
+    try {
+      const shareUrl = getShareUrl();
+      await navigator.clipboard.writeText(shareUrl);
+      toast({
+        title: '링크 복사 완료',
+        description: '링크가 클립보드에 복사되었습니다.',
+      });
+    } catch (error) {
+      console.error('URL 복사 중 오류:', error);
+      toast({
+        title: '복사 실패',
+        description: '링크 복사에 실패했습니다.',
+        variant: 'destructive',
+      });
+    }
+  };
+
+  // 기본 공유 (Web Share API)
+  const handleNativeShare = async () => {
+    if (!post || isSharing) return;
+
+    setIsSharing(true);
+
+    const shareUrl = getShareUrl();
+    const shareData = {
+      title: post.title,
+      text: `${post.title}\n\n${post.content.substring(0, 100)}${post.content.length > 100 ? '...' : ''}`,
+      url: shareUrl,
+    };
+
+    try {
+      if (navigator.share) {
+        await navigator.share(shareData);
+      } else {
+        toast({
+          title: '공유 불가',
+          description: '이 브라우저는 공유 기능을 지원하지 않습니다.',
+        });
+      }
+    } catch (error) {
+      if (error instanceof Error && error.name !== 'AbortError') {
+        console.error('공유 중 오류 발생:', error);
+      }
+    } finally {
+      setIsSharing(false);
+    }
+  };
+
+  // 스레드로 공유
+  const handleShareToThreads = () => {
+    if (!post) return;
+    
+    const shareUrl = getShareUrl();
+    const text = encodeURIComponent(`${post.title}\n\n${shareUrl}`);
+    window.open(`https://www.threads.net/intent/post?text=${text}`, '_blank');
+  };
+
+  // 트위터(X)로 공유
+  const handleShareToTwitter = () => {
+    if (!post) return;
+    
+    const shareUrl = getShareUrl();
+    const text = encodeURIComponent(post.title);
+    window.open(`https://twitter.com/intent/tweet?text=${text}&url=${shareUrl}`, '_blank');
+  };
+
+  // 페이스북으로 공유
+  const handleShareToFacebook = () => {
+    if (!post) return;
+    
+    const shareUrl = getShareUrl();
+    window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`, '_blank');
   };
 
   const scrollToComments = () => {
@@ -181,10 +265,38 @@ export default function PostDetailPage({ params }: PostDetailPageProps) {
                   />
                   {isLiked ? '공감함' : '공감하기'}
                 </Button>
-                <Button variant="outline" className="gap-2">
-                  <Share2 className="w-4 h-4" />
-                  공유하기
-                </Button>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="outline" className="gap-2">
+                      <Share2 className="w-4 h-4" />
+                      공유하기
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-56">
+                    <DropdownMenuItem onClick={handleCopyUrl}>
+                      <Link2 className="w-4 h-4 mr-2" />
+                      URL 복사하기
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={handleNativeShare}>
+                      <Share className="w-4 h-4 mr-2" />
+                      기본 공유
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={handleShareToThreads}>
+                      <MessageSquare className="w-4 h-4 mr-2" />
+                      스레드로 공유
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={handleShareToTwitter}>
+                      <svg className="w-4 h-4 mr-2" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                      </svg>
+                      트위터(X)로 공유
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={handleShareToFacebook}>
+                      <Facebook className="w-4 h-4 mr-2" />
+                      페이스북으로 공유
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </div>
             </CardContent>
           </Card>

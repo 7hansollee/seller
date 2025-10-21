@@ -67,7 +67,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             setUser(null);
           }
         } catch (error) {
-          console.error('AuthProvider: Failed to handle auth state change:', error);
+          // Invalid Refresh Token 에러는 조용히 처리
+          const errorMessage = error instanceof Error ? error.message : '';
+          if (!errorMessage.includes('Invalid Refresh Token') && 
+              !errorMessage.includes('Refresh Token Not Found')) {
+            console.error('AuthProvider: Failed to handle auth state change:', error);
+          }
           setUser(null);
         } finally {
           setLoading(false);
