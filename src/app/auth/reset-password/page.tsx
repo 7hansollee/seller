@@ -11,7 +11,7 @@ export default function ResetPasswordPage() {
         href="/" 
         className="absolute top-4 left-4 md:top-6 md:left-6 flex items-center space-x-2 hover:opacity-80 transition-opacity"
       >
-        <span className="text-xl font-bold text-foreground">셀러상담소</span>
+        <span className="text-xl font-bold text-foreground">나는 셀러</span>
       </Link>
       
       <Card className="w-full max-w-md">

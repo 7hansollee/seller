@@ -11,14 +11,14 @@ export default function LoginPage() {
         href="/" 
         className="absolute top-4 left-4 md:top-6 md:left-6 flex items-center space-x-2 hover:opacity-80 transition-opacity"
       >
-        <span className="text-xl font-bold text-foreground">셀러상담소</span>
+        <span className="text-xl font-bold text-foreground">나는 셀러</span>
       </Link>
       
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl font-bold text-center">로그인</CardTitle>
           <CardDescription className="text-center">
-            셀러상담소에 로그인하세요
+            나는 셀러에 로그인하세요
           </CardDescription>
         </CardHeader>
         <CardContent>

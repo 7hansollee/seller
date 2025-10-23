@@ -11,10 +11,10 @@ export function HeroSection() {
         <div className="flex flex-col items-center text-center space-y-4">
           <div className="space-y-3">
             <h1 className="text-3xl md:text-5xl font-bold tracking-tight text-foreground">
-              온라인 셀러만의 익명 커뮤니티
+              1인 온라인 셀러만의 익명 커뮤니티
             </h1>
             <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
-              온라인 셀러가 아니라면 공감하지 못할<br />
+              1인 온라인 셀러가 아니라면 공감하지 못할<br />
               스트레스와 이야기를 나누고 공감과 위로를 받아가세요.
             </p>
           </div>

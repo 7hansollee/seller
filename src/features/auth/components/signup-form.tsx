@@ -104,7 +104,7 @@ export function SignUpForm() {
 
       toast({
         title: '회원가입 완료',
-        description: '환영합니다! 셀러상담소에 오신 것을 환영합니다.',
+        description: '환영합니다! 나는 셀러에 오신 것을 환영합니다.',
       });
 
       router.push('/');
@@ -239,7 +239,7 @@ export function SignUpForm() {
         <Label htmlFor="expectations">무엇을 기대하며 가입하셨나요?</Label>
         <Textarea
           id="expectations"
-          placeholder="셀러상담소에서 얻고자 하는 것, 기대하는 바를 자유롭게 작성해주세요..."
+          placeholder="나는 셀러에서 얻고자 하는 것, 기대하는 바를 자유롭게 작성해주세요..."
           {...register('expectations')}
           disabled={isLoading}
           rows={4}

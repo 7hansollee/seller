@@ -52,7 +52,7 @@ export function Header() {
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         <div className="flex items-center gap-6">
           <Link href="/" className="flex items-center space-x-2">
-            <span className="text-xl font-bold text-foreground">셀러상담소</span>
+            <span className="text-xl font-bold text-foreground">나는 셀러</span>
           </Link>
 
           <nav className="hidden md:flex items-center gap-6">

@@ -188,7 +188,7 @@ export default function PrivacyPage() {
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <div className="text-sm text-muted-foreground">
-              © 2025 셀러상담소. 온라인 셀러들을 위한 익명 커뮤니티
+              © 2025 나는 셀러. 온라인 셀러들을 위한 익명 커뮤니티
             </div>
             <div className="flex gap-4 text-sm text-muted-foreground">
               <Link href="/terms" className="hover:text-foreground transition-colors">
