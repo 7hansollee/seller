@@ -13,7 +13,9 @@ export async function getPostForMetadata(id: string) {
         title,
         content,
         category,
-        created_at
+        created_at,
+        like_count,
+        comment_count
       `)
       .eq('id', id)
       .eq('is_published', true)
