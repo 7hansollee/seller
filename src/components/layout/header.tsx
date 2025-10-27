@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Search, Menu, LogOut, User } from 'lucide-react';
 import { useState } from 'react';
@@ -52,7 +53,14 @@ export function Header() {
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         <div className="flex items-center gap-6">
           <Link href="/" className="flex items-center space-x-2">
-            <span className="text-xl font-bold text-foreground">나는 셀러</span>
+            <Image
+              src="/logo.png"
+              alt="나는 셀러"
+              width={180}
+              height={75}
+              className="h-14 w-auto"
+              priority
+            />
           </Link>
 
           <nav className="hidden md:flex items-center gap-6">

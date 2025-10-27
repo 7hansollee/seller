@@ -9,6 +9,15 @@ export async function GET(request: NextRequest) {
     
     const title = searchParams.get('title') || '나는 셀러';
     const description = searchParams.get('description') || '1인 온라인 셀러 커뮤니티';
+    const content = searchParams.get('content') || '';
+    const category = searchParams.get('category') || '커뮤니티';
+    const likeCount = searchParams.get('likeCount') || '0';
+    const commentCount = searchParams.get('commentCount') || '0';
+
+    // 본문 미리보기 (최대 150자)
+    const contentPreview = content.length > 150 
+      ? content.slice(0, 150) + '...' 
+      : content || description;
 
     return new ImageResponse(
       (
@@ -18,88 +27,132 @@ export async function GET(request: NextRequest) {
             width: '100%',
             display: 'flex',
             flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            backgroundColor: '#0f172a',
-            backgroundImage: 'linear-gradient(to bottom right, #0f172a, #1e293b)',
+            backgroundColor: 'white',
             position: 'relative',
           }}
         >
-          {/* 배경 패턴 */}
-          <div
-            style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              backgroundImage: 'radial-gradient(circle at 25px 25px, rgba(255, 255, 255, 0.05) 2%, transparent 0%), radial-gradient(circle at 75px 75px, rgba(255, 255, 255, 0.05) 2%, transparent 0%)',
-              backgroundSize: '100px 100px',
-            }}
-          />
-          
-          {/* 메인 컨텐츠 */}
+          {/* 상단 헤더 (브랜드) */}
           <div
             style={{
               display: 'flex',
-              flexDirection: 'column',
               alignItems: 'center',
-              justifyContent: 'center',
-              padding: '80px',
-              zIndex: 10,
+              justifyContent: 'space-between',
+              padding: '40px 60px',
+              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
             }}
           >
-            {/* 로고/타이틀 */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+              <div
+                style={{
+                  fontSize: 48,
+                  fontWeight: 'bold',
+                  color: 'white',
+                  letterSpacing: '-0.02em',
+                }}
+              >
+                🛍️ 나는 셀러
+              </div>
+            </div>
             <div
               style={{
-                fontSize: 96,
+                fontSize: 24,
+                color: 'rgba(255, 255, 255, 0.95)',
+                backgroundColor: 'rgba(255, 255, 255, 0.25)',
+                padding: '12px 28px',
+                borderRadius: '30px',
+                fontWeight: '600',
+              }}
+            >
+              {category}
+            </div>
+          </div>
+
+          {/* 메인 콘텐츠 영역 */}
+          <div
+            style={{
+              flex: 1,
+              display: 'flex',
+              flexDirection: 'column',
+              padding: '60px',
+              backgroundColor: '#fafafa',
+            }}
+          >
+            {/* 제목 */}
+            <div
+              style={{
+                fontSize: 52,
                 fontWeight: 'bold',
-                color: 'white',
+                color: '#1a1a1a',
                 marginBottom: 30,
-                textAlign: 'center',
-                letterSpacing: '-0.02em',
+                lineHeight: 1.3,
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                display: '-webkit-box',
+                WebkitLineClamp: 2,
+                WebkitBoxOrient: 'vertical',
               }}
             >
               {title}
             </div>
             
-            {/* 설명 */}
+            {/* 본문 미리보기 */}
+            {contentPreview && (
+              <div
+                style={{
+                  fontSize: 30,
+                  color: '#666',
+                  lineHeight: 1.6,
+                  marginBottom: 40,
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  display: '-webkit-box',
+                  WebkitLineClamp: 3,
+                  WebkitBoxOrient: 'vertical',
+                }}
+              >
+                {contentPreview}
+              </div>
+            )}
+
+            {/* 통계 정보 */}
             <div
               style={{
-                fontSize: 42,
-                color: '#94a3b8',
-                textAlign: 'center',
-                maxWidth: '900px',
-                lineHeight: 1.4,
+                display: 'flex',
+                gap: '40px',
+                marginTop: 'auto',
               }}
             >
-              {description}
-            </div>
-            
-            {/* 태그라인 */}
-            <div
-              style={{
-                fontSize: 28,
-                color: '#64748b',
-                marginTop: 50,
-                textAlign: 'center',
-              }}
-            >
-              스트레스 해소 • 팁 공유 • 운영 고민 상담
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <div style={{ fontSize: 32 }}>❤️</div>
+                <div style={{ fontSize: 28, color: '#666', fontWeight: '600' }}>
+                  공감 {likeCount}
+                </div>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <div style={{ fontSize: 32 }}>💬</div>
+                <div style={{ fontSize: 28, color: '#666', fontWeight: '600' }}>
+                  댓글 {commentCount}
+                </div>
+              </div>
             </div>
           </div>
-          
-          {/* 하단 URL */}
+
+          {/* 하단 푸터 */}
           <div
             style={{
-              position: 'absolute',
-              bottom: 40,
-              right: 60,
-              fontSize: 24,
-              color: '#475569',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              padding: '30px 60px',
+              backgroundColor: '#1a1a1a',
             }}
           >
-            seller-green.vercel.app
+            <div style={{ fontSize: 24, color: '#999' }}>
+              온라인 셀러 커뮤니티
+            </div>
+            <div style={{ fontSize: 24, color: '#999' }}>
+              seller-green.vercel.app
+            </div>
           </div>
         </div>
       ),

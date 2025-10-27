@@ -23,6 +23,15 @@ export async function generateMetadata({ params }: PostDetailPageProps): Promise
     ? `${post.content.slice(0, 160)}...` 
     : post.content;
 
+  // OG 이미지 URL에 충분한 정보 전달
+  const ogImageUrl = `/api/og?${new URLSearchParams({
+    title: post.title,
+    category: categoryLabel,
+    content: post.content.slice(0, 200), // 본문 일부
+    likeCount: String(post.like_count || 0),
+    commentCount: String(post.comment_count || 0),
+  }).toString()}`;
+
   return {
     title: `${post.title} - 나는 셀러`,
     description: description,
@@ -35,7 +44,7 @@ export async function generateMetadata({ params }: PostDetailPageProps): Promise
       section: categoryLabel,
       images: [
         {
-          url: `/api/og?title=${encodeURIComponent(post.title)}&description=${encodeURIComponent(categoryLabel)}`,
+          url: ogImageUrl,
           width: 1200,
           height: 630,
           alt: post.title,
@@ -46,7 +55,7 @@ export async function generateMetadata({ params }: PostDetailPageProps): Promise
       card: 'summary_large_image',
       title: post.title,
       description: description,
-      images: [`/api/og?title=${encodeURIComponent(post.title)}&description=${encodeURIComponent(categoryLabel)}`],
+      images: [ogImageUrl],
     },
   };
 }
