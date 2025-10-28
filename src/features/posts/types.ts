@@ -38,13 +38,11 @@ export type PostCategory =
   | 'seller_chat'
   | 'stress'
   | 'tips'
-  | 'worry'
-  | 'management_worry';
+  | 'worry';
 
 export const POST_CATEGORIES: { value: PostCategory; label: string }[] = [
   { value: 'seller_chat', label: '셀러 잡담' },
   { value: 'stress', label: '스트레스' },
   { value: 'tips', label: '팁 공유' },
   { value: 'worry', label: '운영 고민' },
-  { value: 'management_worry', label: '운영 고민' },
 ];

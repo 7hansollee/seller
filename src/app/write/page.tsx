@@ -146,7 +146,7 @@ export default function WritePage() {
                   <SelectItem value="seller_chat">셀러 잡담</SelectItem>
                   <SelectItem value="stress">스트레스</SelectItem>
                   <SelectItem value="tips">팁 공유</SelectItem>
-                  <SelectItem value="management_worry">운영 고민</SelectItem>
+                  <SelectItem value="worry">운영 고민</SelectItem>
                 </SelectContent>
               </Select>
             </div>
