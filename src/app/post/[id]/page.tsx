@@ -25,13 +25,15 @@ export async function generateMetadata({ params }: PostDetailPageProps): Promise
       ? `${post.content.slice(0, 160)}...` 
       : post.content;
 
-    // OG 이미지 URL에 충분한 정보 전달
+    // 캐싱 방지를 위해 timestamp 추가
+    const timestamp = new Date().getTime();
     const ogImageUrl = `/api/og?${new URLSearchParams({
       title: post.title,
       category: categoryLabel,
-      content: post.content.slice(0, 200), // 본문 일부
+      content: post.content.slice(0, 200),
       likeCount: String(post.like_count || 0),
       commentCount: String(post.comment_count || 0),
+      t: String(timestamp), // 캐시 버스팅
     }).toString()}`;
 
     return {
