@@ -15,7 +15,7 @@ export function HeroSection() {
             </h1>
             <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
               1인 온라인 셀러가 아니라면 공감하지 못할<br />
-              스트레스와 이야기를 나누고 공감과 위로를 받아가세요.
+              이야기를 나누고 공감과 위로를 받아가세요.
             </p>
           </div>
 
